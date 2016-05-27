@@ -37,9 +37,11 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardAdapte
         businessViewHolder.vName.setText(business.name());
         businessViewHolder.vPhone.setText(business.phone());
         businessViewHolder.vAddress.setText(business.location().address().get(0));
-        businessViewHolder.vImage.setImageResource(R.mipmap.ic_launcher);
+
         Picasso.with(businessViewHolder.vImage.getContext())
                 .load(business.imageUrl())
+                .placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher)
                 .resize(150, 150)
                 .centerCrop()
                 .into(businessViewHolder.vImage);
