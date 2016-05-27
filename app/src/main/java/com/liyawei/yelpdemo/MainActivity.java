@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.Toast;
 
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
@@ -22,6 +23,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+
+    private static final String SAVE_KEY_BUSINESS_LIST = ":MainActivity:businessList";
 
     YelpAPIFactory apiFactory = new YelpAPIFactory(Utility.CONSUMER_KEY, Utility.CONSUMER_SECRET, Utility.TOKEN, Utility.TOKEN_SECRET);
     YelpAPI yelpAPI = apiFactory.createAPI();
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             businesses = new ArrayList<Business>();
         }
         else{
-            businesses = (ArrayList<Business>) savedInstanceState.getSerializable("businesses");
+            businesses = (ArrayList<Business>) savedInstanceState.getSerializable(SAVE_KEY_BUSINESS_LIST);
         }
         bca = new BusinessCardAdapter(businesses);
         recList.setAdapter(bca);
@@ -65,24 +68,38 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         return true;
     }
 
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_sort:
+//                //Collections.sort(businesses);
+//                return true;
+//
+//            default:
+//                // If we got here, the user's action was not recognized.
+//                // Invoke the superclass to handle it.
+//                return super.onOptionsItemSelected(item);
+//
+//        }
+//    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("businesses", businesses);
+        outState.putSerializable(SAVE_KEY_BUSINESS_LIST, businesses);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        businesses = (ArrayList<Business>) savedInstanceState.getSerializable("businesses");
+        businesses = (ArrayList<Business>) savedInstanceState.getSerializable(SAVE_KEY_BUSINESS_LIST);
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
         searchView.clearFocus();
+        Toast.makeText(getApplicationContext(), "Searching 1", Toast.LENGTH_SHORT).show();
         Map<String, String> params = new HashMap<>();
-
-
         params.put("term", query);
         params.put("sort", "2");
         params.put("limit", "10");
@@ -94,13 +111,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 SearchResponse searchResponse = response.body();
                 // Update UI text with the searchResponse.
-
+                Toast.makeText(getApplicationContext(), "Searching", Toast.LENGTH_SHORT).show();
                 handleResponce(searchResponse);
             }
 
             @Override
             public void onFailure(Call<SearchResponse> call, Throwable t) {
                 // HTTP error happened, do something to handle it.
+                Toast.makeText(getApplicationContext(), "Failed, There might be a problem with server", Toast.LENGTH_SHORT).show();
             }
         };
 
