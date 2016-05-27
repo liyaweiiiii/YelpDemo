@@ -1,8 +1,11 @@
 package com.liyawei.yelpdemo;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +14,7 @@ import com.yelp.clientlib.entities.Business;
 
 public class DetailActivity extends AppCompatActivity {
 
+    private static final String LOG_TAG = "DetailActivity";
     Business mBusiness;
 
     ImageView picture, ratting;
@@ -20,6 +24,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView area;
     TextView city;
     TextView recentReview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +61,38 @@ public class DetailActivity extends AppCompatActivity {
             Picasso.with(this)
                     .load(mBusiness.ratingImgUrlLarge())
                     .into(ratting);
+            addr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Uri geoLocation = Uri.parse("geo:"
+                            + mBusiness.location().coordinate().latitude() + ","
+                            + mBusiness.location().coordinate().longitude());
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(geoLocation);
+
+                    if (intent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
+                        startActivity(intent);
+                    } else {
+                        Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
+                    }
+                }
+            });
+            recentReview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = mBusiness.url();
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(url));
+                    if (intent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
+                }
+            });
         }
+    }
+
+    @Override
+    public Intent getParentActivityIntent() {
+        return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 }

@@ -1,10 +1,14 @@
 package com.liyawei.yelpdemo;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,8 +55,19 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        
+
         recList.setLayoutManager(llm);
+        //recList.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.HORIZONTAL ));
+
+//        Resources res = getResources();
+//        Configuration conf = res.getConfiguration();
+//        int flag = conf.orientation;
+//        if (flag == Configuration.ORIENTATION_PORTRAIT) {
+//            recList.setLayoutManager(new StaggeredGridLayoutManager(3, GridLayoutManager.HORIZONTAL ));
+//        } else if (flag == Configuration.ORIENTATION_LANDSCAPE) {
+//            recList.setLayoutManager(new StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL ));
+//        }
+
         if(savedInstanceState == null){
             businesses = new ArrayList<>();
         }
