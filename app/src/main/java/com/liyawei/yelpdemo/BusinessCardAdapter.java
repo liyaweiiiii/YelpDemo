@@ -1,5 +1,6 @@
 package com.liyawei.yelpdemo;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +48,7 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardAdapte
         return new BusinessViewHolder(itemView);
     }
 
-    public static class BusinessViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class BusinessViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         protected ImageView vImage;
         protected TextView vName;
@@ -66,6 +67,9 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardAdapte
         @Override
         public void onClick(View view) {
             Log.d(LOG_TAG, "onClick " + getAdapterPosition());
+            Intent intent = new Intent(view.getContext(), DetailActivity.class)
+                    .putExtra(Intent.EXTRA_TEXT, businessList.get(getAdapterPosition()));
+            view.getContext().startActivity(intent);
         }
     }
 }

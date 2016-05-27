@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.yelp.clientlib.connection.YelpAPI;
@@ -57,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
         bca = new BusinessCardAdapter(businesses);
         recList.setAdapter(bca);
-
     }
 
     @Override
@@ -84,10 +86,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 recList.setAdapter(new BusinessCardAdapter(businesses));
                 recList.invalidate();
                 return true;
-
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
 
         }
