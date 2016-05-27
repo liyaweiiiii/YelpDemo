@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.yelp.clientlib.entities.Business;
 
 import java.util.List;
@@ -37,6 +38,11 @@ public class BusinessCardAdapter extends RecyclerView.Adapter<BusinessCardAdapte
         businessViewHolder.vPhone.setText(business.phone());
         businessViewHolder.vAddress.setText(business.location().address().get(0));
         businessViewHolder.vImage.setImageResource(R.mipmap.ic_launcher);
+        Picasso.with(businessViewHolder.vImage.getContext())
+                .load(business.imageUrl())
+                .resize(150, 150)
+                .centerCrop()
+                .into(businessViewHolder.vImage);
     }
 
     @Override
