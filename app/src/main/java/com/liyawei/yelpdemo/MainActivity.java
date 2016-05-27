@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.yelp.clientlib.connection.YelpAPI;
@@ -15,6 +16,8 @@ import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.entities.SearchResponse;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
         if(savedInstanceState == null){
-            businesses = new ArrayList<Business>();
+            businesses = new ArrayList<>();
         }
         else{
             businesses = (ArrayList<Business>) savedInstanceState.getSerializable(SAVE_KEY_BUSINESS_LIST);
@@ -68,20 +71,27 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_sort:
-//                //Collections.sort(businesses);
-//                return true;
-//
-//            default:
-//                // If we got here, the user's action was not recognized.
-//                // Invoke the superclass to handle it.
-//                return super.onOptionsItemSelected(item);
-//
-//        }
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sort:
+                Collections.sort(businesses, new Comparator<Business>() {
+                    @Override
+                    public int compare(Business business1, Business business2) {
+                        return business1.name().compareTo(business2.name());
+                    }
+                });
+                recList.setAdapter(new BusinessCardAdapter(businesses));
+                recList.invalidate();
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -98,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextSubmit(String query) {
         searchView.clearFocus();
-        Toast.makeText(getApplicationContext(), "Searching 1", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Searching", Toast.LENGTH_SHORT).show();
         Map<String, String> params = new HashMap<>();
         params.put("term", query);
         params.put("sort", "2");
@@ -110,8 +120,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 SearchResponse searchResponse = response.body();
-                // Update UI text with the searchResponse.
-                Toast.makeText(getApplicationContext(), "Searching", Toast.LENGTH_SHORT).show();
+
                 handleResponce(searchResponse);
             }
 
@@ -130,9 +139,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         businesses = searchResponse.businesses();
         int totalNumberOfResult = searchResponse.total();
 
-//        bca = new BusinessCardAdapter(businesses);
-//        recList.setAdapter(bca);
-//        bca.notifyDataSetChanged();
         recList.setAdapter(new BusinessCardAdapter(businesses));
         recList.invalidate();
     }
