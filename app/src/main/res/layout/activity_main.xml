@@ -4,12 +4,14 @@
     android:id="@+id/frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e5e5e5"
     tools:context="com.liyawei.yelpdemo.MainActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cardList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
         android:clipToPadding="false">
     </android.support.v7.widget.RecyclerView>
 </FrameLayout>

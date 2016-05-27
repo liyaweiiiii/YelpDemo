@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
+        
         recList.setLayoutManager(llm);
         if(savedInstanceState == null){
             businesses = new ArrayList<>();
