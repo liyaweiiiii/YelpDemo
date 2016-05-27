@@ -21,25 +21,36 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     YelpAPIFactory apiFactory = new YelpAPIFactory(Utility.CONSUMER_KEY, Utility.CONSUMER_SECRET, Utility.TOKEN, Utility.TOKEN_SECRET);
     YelpAPI yelpAPI = apiFactory.createAPI();
 
     SearchView searchView;
+
     RecyclerView recList;
+    BusinessCardAdapter bca;
+    ArrayList<Business> businesses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-            recList = (RecyclerView) findViewById(R.id.cardList);
-            recList.setHasFixedSize(true);
+        recList = (RecyclerView) findViewById(R.id.cardList);
+        recList.setHasFixedSize(true);
 
-            LinearLayoutManager llm = new LinearLayoutManager(this);
-            llm.setOrientation(LinearLayoutManager.VERTICAL);
-            recList.setLayoutManager(llm);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
+        if(savedInstanceState == null){
+            businesses = new ArrayList<Business>();
+        }
+        else{
+            businesses = (ArrayList<Business>) savedInstanceState.getSerializable("businesses");
+        }
+        bca = new BusinessCardAdapter(businesses);
+        recList.setAdapter(bca);
 
     }
 
@@ -52,6 +63,18 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         searchView.setOnQueryTextListener(this);
 
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("businesses", businesses);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        businesses = (ArrayList<Business>) savedInstanceState.getSerializable("businesses");
     }
 
     @Override
@@ -86,11 +109,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     private void handleResponce(SearchResponse searchResponse) {
-        ArrayList<Business> businesses = searchResponse.businesses();
+        businesses = searchResponse.businesses();
         int totalNumberOfResult = searchResponse.total();
 
-        BusinessCardAdapter bca = new BusinessCardAdapter(businesses);
-        recList.setAdapter(bca);
+//        bca = new BusinessCardAdapter(businesses);
+//        recList.setAdapter(bca);
+//        bca.notifyDataSetChanged();
+        recList.setAdapter(new BusinessCardAdapter(businesses));
+        recList.invalidate();
     }
 
     @Override
