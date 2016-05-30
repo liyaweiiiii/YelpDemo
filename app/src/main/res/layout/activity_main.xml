@@ -14,4 +14,12 @@
         android:layout_gravity="center_horizontal"
         android:clipToPadding="false">
     </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/welcome_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="Search from yelp in Toronto"
+        android:layout_gravity="center" />
 </FrameLayout>

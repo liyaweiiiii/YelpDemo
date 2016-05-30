@@ -1,20 +1,15 @@
 package com.liyawei.yelpdemo;
 
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yelp.clientlib.connection.YelpAPI;
@@ -45,10 +40,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     BusinessCardAdapter bca;
     ArrayList<Business> businesses;
 
+    TextView welcomeText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        welcomeText = (TextView) findViewById(R.id.welcome_text);
 
         recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
@@ -76,6 +75,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
         bca = new BusinessCardAdapter(businesses);
         recList.setAdapter(bca);
+
+        if (businesses.size() == 0)
+            welcomeText.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 });
                 recList.setAdapter(new BusinessCardAdapter(businesses));
                 recList.invalidate();
+                welcomeText.setVisibility(View.INVISIBLE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -156,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         recList.setAdapter(new BusinessCardAdapter(businesses));
         recList.invalidate();
+        welcomeText.setVisibility(View.INVISIBLE);
     }
 
     @Override

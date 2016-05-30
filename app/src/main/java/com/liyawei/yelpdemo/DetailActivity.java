@@ -47,7 +47,9 @@ public class DetailActivity extends AppCompatActivity {
             name.setText(mBusiness.name());
             phone.setText(mBusiness.phone());
             addr.setText(mBusiness.location().displayAddress().get(0));
-            area.setText(mBusiness.location().neighborhoods().get(0));
+            if (mBusiness.location().neighborhoods()!=null){
+                area.setText(mBusiness.location().neighborhoods().get(0));
+            }
             city.setText(mBusiness.location().city());
             recentReview.setText(mBusiness.snippetText());
 
