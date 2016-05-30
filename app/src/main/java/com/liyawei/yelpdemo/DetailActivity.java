@@ -1,6 +1,7 @@
 package com.liyawei.yelpdemo;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -63,6 +64,7 @@ public class DetailActivity extends AppCompatActivity {
             Picasso.with(this)
                     .load(mBusiness.ratingImgUrlLarge())
                     .into(ratting);
+            addr.setPaintFlags(addr.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             addr.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -79,6 +81,7 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 }
             });
+            recentReview.setPaintFlags(recentReview.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             recentReview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

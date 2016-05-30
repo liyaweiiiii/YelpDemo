@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         llm.setOrientation(LinearLayoutManager.VERTICAL);
 
         recList.setLayoutManager(llm);
-        //recList.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.HORIZONTAL ));
 
 //        Resources res = getResources();
 //        Configuration conf = res.getConfiguration();
@@ -101,9 +100,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         return business1.name().compareTo(business2.name());
                     }
                 });
-                recList.setAdapter(new BusinessCardAdapter(businesses));
-                recList.invalidate();
-                welcomeText.setVisibility(View.INVISIBLE);
+                updateList();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -156,14 +153,18 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private void handleResponce(SearchResponse searchResponse) {
         businesses = searchResponse.businesses();
         int totalNumberOfResult = searchResponse.total();
-
-        recList.setAdapter(new BusinessCardAdapter(businesses));
-        recList.invalidate();
-        welcomeText.setVisibility(View.INVISIBLE);
+        updateList();
     }
 
     @Override
     public boolean onQueryTextChange(String query) {
         return false;
+    }
+
+    private void updateList(){
+        recList.setAdapter(new BusinessCardAdapter(businesses));
+        recList.invalidate();
+        if (businesses.size()!=0)
+            welcomeText.setVisibility(View.INVISIBLE);
     }
 }
